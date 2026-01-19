@@ -8,6 +8,7 @@ from .config import BASE_URL, PAGE_TIMEOUT
 from .parser import extract_total_pages, extract_jobs
 from .exporter import write_jobs_to_csv, write_jobs_to_jsonl_async
 from .job_details import parse_job_page
+from .position_type_classifier import extract_position_type
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +85,9 @@ async def scrape_pages(
             if job["url"] != "N/A":
                 details = await scrape_job_details(detail_page, job["url"])
                 job.update(details)
+                # AI classification not needed as we can extract this details from page badges itself.
+                # position = extract_position_type(details.get("Job Description"))
+                # logger.info(f"Position type {position}")
 
             detailed_jobs.append(job)
 
